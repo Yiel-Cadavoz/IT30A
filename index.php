@@ -308,7 +308,7 @@ if($section==='students' && $action==='update'){
 
 <?php if (isset($_SESSION['alert'])): ?>
     <script>
-        alert(<? json_encode($_SESSION['alert'])?>);
+        alert(<?= json_encode($_SESSION['alert'])?>);
     </script>
 
     <?php unset($_SESSION['alert']); ?>
