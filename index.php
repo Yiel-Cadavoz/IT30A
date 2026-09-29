@@ -71,7 +71,7 @@ if($section==='students' && $action==='create'){
             $course
         ]);
 
-        //$_SESSION['alert'] = 'Student Saved Successfully';
+        $_SESSION['alert'] = 'Student Saved Successfully';
 
         header("Location: index.php?section=students");
         exit;
@@ -79,6 +79,57 @@ if($section==='students' && $action==='create'){
 
     }
 
+}
+
+// Update Student
+if($section==='students' && $action==='update'){
+    $studentId = (int) ($_GET['id'] ?? 0);
+
+    // Retrieve Student Information
+    $stmt = $pdo->prepare("
+        SELECT *
+        FROM students
+        WHERE student_id =?
+    ");
+
+    $stmt->execute([$studentId]);
+
+    $student = $stmt->fetch();
+
+    // Update Student Info
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+         
+    $firstName = trim($_POST['student_first_name'] ?? '');
+    $lastName = trim($_POST['student_last_name'] ?? '');
+    $course = trim($_POST['student_course'] ?? '');
+
+        if($firstName !== '' && $lastName !== '' && $course !== ''){
+
+        $sql=("
+            UPDATE students
+            SET
+                student_first_name=?,
+                student_last_name=?,
+                student_course=?
+            WHERE student_id=?
+        ");
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([
+            $firstName,
+            $lastName,
+            $course,
+            $studentId
+        ]);
+
+        $_SESSION['alert'] = 'Student Updated Successfully';
+
+        header("Location: index.php?section=students");
+        exit;
+    }
+
+    }
 }
 
 
@@ -149,6 +200,52 @@ if($section==='students' && $action==='create'){
              </a>
 
         </form>
+
+        <?php elseif($action==='update'): ?>
+        <h2> Update Student </h2> 
+        
+        <form method="POST">
+            <p>
+                <label>First Name</label>
+                <br>
+                <input type="text"
+                    name="student_first_name"
+                    value="<?= htmlspecialchars($student['student_first_name'])?>"
+                    required
+                />
+             </p>
+
+
+            <p>
+                <label>Last Name</label>
+                <br>
+                <input type="text"
+                    name="student_last_name"
+                    value="<?= htmlspecialchars($student['student_last_name'])?>"
+                    required
+                />
+             </p>
+
+             <p>
+                <label>Course</label>
+                <br>
+                <input type="text"
+                    name="student_course"
+                    value="<?= htmlspecialchars($student['student_course'])?>"
+                    required
+                />
+             </p>
+
+            <button type="submit">
+                Save
+             </button>
+
+        <a href="index.php?section=students">
+                Cancel
+             </a>
+
+        </form>
+
         <?php else: ?>     
          <table>
                  <thead>
@@ -180,7 +277,7 @@ if($section==='students' && $action==='create'){
                             <?=htmlspecialchars($student['student_created_at']) ?>
                         </td>
                          <td>
-                            <a>Edit</a>
+                            <a href="index.php?section=students&action=update&id=<?= $student['student_id'] ?>">Edit</a>
                             |
                             <a>Delete</a>
                         </td>
@@ -208,4 +305,14 @@ if($section==='students' && $action==='create'){
 
     
 </body>
+
+<?php if (isset($_SESSION['alert'])): ?>
+    <script>
+        alert(<? json_encode($_SESSION['alert'])?>);
+    </script>
+
+    <?php unset($_SESSION['alert']); ?>
+
+<?php endif; ?>
+
 </html>
