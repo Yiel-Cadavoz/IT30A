@@ -345,6 +345,24 @@ if($section==='borrow' && $action=="create"){
 }
 }
 
+//Return a Book
+if($section==='borrow' && $action==='return'){
+    $borrowId = (int) ($_GET['id'] ?? 0);
+
+    $stmt = $pdo->prepare("
+        UPDATE borrow
+        SET borrow_return_date = CURRENT_TIMESTAMP
+        WHERE borrow_id=?
+    ");
+
+    $stmt -> execute([$borrowId]);
+
+    $_SESSION['alert'] = 'Book returned successfully.';
+
+    header("Location: index.php?section=borrow");
+    exit;
+}
+
 
 
 ?>
@@ -460,7 +478,7 @@ if($section==='borrow' && $action=="create"){
         </form>
 
         <?php else: ?>     
-         <table>
+        <table border="1" cellpadding="8">
                  <thead>
                      <tr>
                     <th>ID</th>
@@ -608,8 +626,7 @@ if($section==='borrow' && $action=="create"){
 
     <?php else: ?>
 
-        <table>
-
+        <table border="1" cellpadding="8">
             <thead>
 
                 <tr>
@@ -745,7 +762,7 @@ if($section==='borrow' && $action=="create"){
 
     <?php endif;?>
 
-    <table>
+    <table border="1" cellpadding="8">
     <thead>
         <tr>
             <th>ID</th>
@@ -753,6 +770,7 @@ if($section==='borrow' && $action=="create"){
             <th>Book Name</th>
             <th>Borrow Date</th>
             <th>Return Date</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -786,9 +804,26 @@ if($section==='borrow' && $action=="create"){
                 </td>
 
                 <td>
-                    <a>Edit</a>
-                    |
-                    <a>Delete</a>
+                    <?php if ($borrow['borrow_return_date']): ?>
+
+                        Returned
+
+                    <?php else: ?>
+
+                        Borrowed
+
+                    <?php endif; ?>
+                </td>
+
+                <td>
+                    <?php if (!$borrow['borrow_return_date']): ?>
+                    <a
+                        href="index.php?section=borrow&action=return&id=<?= $borrow['borrow_id'] ?>"
+                        onclick="return confirm('Mark this book as returned?');"
+                    >
+                        Return
+                    </a>
+                    <?php endif;?>
                 </td>
             </tr>
         <?php endforeach; ?>
