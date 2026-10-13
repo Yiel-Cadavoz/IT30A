@@ -766,8 +766,8 @@ if($section==='borrow' && $action==='return'){
     <thead>
         <tr>
             <th>ID</th>
-            <th>Student Name</th>
-            <th>Book Name</th>
+            <th>Student</th>
+            <th>Book</th>
             <th>Borrow Date</th>
             <th>Return Date</th>
             <th>Status</th>
