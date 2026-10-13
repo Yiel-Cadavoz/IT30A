@@ -255,6 +255,26 @@ if($section === 'borrow'){
     ");
 
     $books = $stmt->fetchAll();
+
+    $stmt = $pdo->query(" 
+    SELECT 
+        borrow.borrow_id, 
+        borrow.student_id, 
+        borrow.book_id, 
+        students.student_first_name, 
+        students.student_last_name, 
+        books.book_title, 
+        borrow.borrow_date, 
+        borrow.borrow_return_date 
+    FROM borrow 
+    INNER JOIN students 
+        ON borrow.student_id = students.student_id 
+    INNER JOIN books 
+        ON borrow.book_id = books.book_id 
+    ORDER BY borrow.borrow_id DESC 
+    "); 
+    
+    $borrows = $stmt->fetchAll();
 }
 
 //Borrow a book
@@ -724,6 +744,57 @@ if($section==='borrow' && $action=="create"){
         </form>
 
     <?php endif;?>
+
+    <table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Book Name</th>
+            <th>Borrow Date</th>
+            <th>Return Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php foreach($borrows as $borrow): ?>
+            <tr>
+                <td>
+                    <?= htmlspecialchars($borrow['borrow_id']) ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars(
+                        $borrow['student_first_name'] . ' ' .
+                        $borrow['student_last_name']
+                    ) ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($borrow['book_title']) ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars($borrow['borrow_date']) ?>
+                </td>
+
+                <td>
+                    <?= htmlspecialchars(
+                        $borrow['borrow_return_date'] ?? 'Not returned'
+                    ) ?>
+                </td>
+
+                <td>
+                    <a>Edit</a>
+                    |
+                    <a>Delete</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+    </table>
+
 
     <?php endif;?>
 
