@@ -106,22 +106,22 @@ function navActive($section,$currentSection){
 
     <nav class="nav-links">
 
-        <a href="index.php?section=dashboard" class="<?=  navActive('dashboard',$currentSection) ?>">
+        <a href="/IT30A/index.php?section=dashboard" class="<?=  navActive('dashboard',$currentSection) ?>">
             <span class="material-icons">dashboard</span>
             Dashboard
         </a>
 
-        <a href="index.php?section=students" class="<?=  navActive('students',$currentSection) ?>">
+        <a href="/IT30A/index.php?section=students" class="<?=  navActive('students',$currentSection) ?>">
             <span class="material-icons">people</span>
             Students
         </a>
 
-        <a href="index.php?section=books" class="<?=  navActive('books',$currentSection) ?>">
+        <a href="/IT30A/index.php?section=books" class="<?=  navActive('books',$currentSection) ?>">
             <span class="material-icons">menu_book</span>
             Books
         </a>
 
-        <a href="index.php?section=borrow" class="<?=  navActive('borrow',$currentSection) ?>">
+        <a href="/IT30A/index.php?section=borrow" class="<?=  navActive('borrow',$currentSection) ?>">
             <span class="material-icons">swap_horiz</span>
             Borrow
         </a>
