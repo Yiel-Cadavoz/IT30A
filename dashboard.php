@@ -435,7 +435,7 @@ $recentBorrows = $recentStmt->fetchAll();
 </div>
 </body>
 <script>
-    (function() {
+    
         // Materialize standard palette
         const colors = {
             blue: '#1976d2',
@@ -445,7 +445,7 @@ $recentBorrows = $recentStmt->fetchAll();
             purple: '#9c27b0',
             grey: '#9e9e9e'
         };
-
+    (function() {
         // ---------- DOUGHNUT : BOOKS BY CATEGORY ----------
 
         const catCtx = document.getElementById('categoryChart').getContext('2d');
